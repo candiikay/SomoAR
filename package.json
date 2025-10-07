@@ -1,9 +1,0 @@
-{
-  "name": "soma-meditation",
-  "version": "1.0.0",
-  "description": "SOMA - Consciousness Meditation",
-  "scripts": {
-    "build": "echo 'Static site - no build needed'",
-    "start": "echo 'Static site'"
-  }
-}

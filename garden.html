@@ -1,0 +1,2062 @@
+'<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOMA - Consciousness Meditation</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+      color: #fff;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(119, 198, 255, 0.2) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
+      background-size: 20px 20px;
+      pointer-events: none;
+      z-index: 2;
+    }
+    
+    #container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+    }
+    
+    #video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+    
+    #canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: auto;
+    }
+    
+    #ui {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 100;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .ar-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.6), transparent);
+      padding: 20px;
+      text-align: center;
+      pointer-events: none;
+      z-index: 101;
+    }
+    
+         .ar-title {
+           color: white;
+           font-size: 16px;
+           font-weight: 200;
+           margin: 0;
+           text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+           letter-spacing: 3px;
+           text-transform: uppercase;
+         }
+         
+         .ar-status {
+           color: rgba(255,255,255,0.5);
+           font-size: 10px;
+           margin-top: 8px;
+           font-weight: 300;
+           text-transform: uppercase;
+           letter-spacing: 1px;
+         }
+    
+    .ar-center-control {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: auto;
+      z-index: 101;
+    }
+    
+         .welcome-screen {
+           text-align: center;
+           animation: fadeInUp 1s ease-out;
+           max-width: 400px;
+           margin: 0 auto;
+         }
+         
+         .abstract-shape {
+           width: 80px;
+           height: 80px;
+           margin: 0 auto 32px auto;
+           background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+           border-radius: 50%;
+           position: relative;
+           animation: float 6s ease-in-out infinite;
+           backdrop-filter: blur(10px);
+           border: 1px solid rgba(255, 255, 255, 0.1);
+         }
+         
+         .abstract-shape::before {
+           content: '';
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           width: 40px;
+           height: 40px;
+           background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+           border-radius: 50%;
+           transform: translate(-50%, -50%);
+           animation: pulse 3s ease-in-out infinite;
+         }
+         
+         .abstract-shape::after {
+           content: '';
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           width: 20px;
+           height: 20px;
+           background: rgba(255, 255, 255, 0.3);
+           border-radius: 50%;
+           transform: translate(-50%, -50%);
+           animation: pulse 2s ease-in-out infinite reverse;
+         }
+         
+         .welcome-title {
+           font-size: 28px;
+           font-weight: 200;
+           color: white;
+           margin-bottom: 20px;
+           text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+           animation: slideInLeft 1s ease-out 0.3s both;
+           letter-spacing: 2px;
+           text-transform: uppercase;
+           font-family: 'Inter', sans-serif;
+         }
+         
+         .welcome-subtitle {
+           font-size: 15px;
+           color: rgba(255,255,255,0.6);
+           margin-bottom: 48px;
+           font-weight: 300;
+           animation: slideInRight 1s ease-out 0.6s both;
+           line-height: 1.6;
+           max-width: 320px;
+           margin-left: auto;
+           margin-right: auto;
+           text-align: center;
+           font-style: italic;
+         }
+         
+         .ar-start-btn {
+           background: rgba(255, 255, 255, 0.05);
+           color: white;
+           border: 1px solid rgba(255, 255, 255, 0.15);
+           padding: 16px 32px;
+           border-radius: 0;
+           font-size: 14px;
+           font-weight: 300;
+           cursor: pointer;
+           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+           backdrop-filter: blur(20px);
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           gap: 16px;
+           animation: bounceIn 1s ease-out 0.9s both;
+           position: relative;
+           overflow: hidden;
+           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+           letter-spacing: 1px;
+           text-transform: uppercase;
+         }
+    
+         .ar-start-btn:hover {
+           background: rgba(255, 255, 255, 0.15);
+           border-color: rgba(255, 255, 255, 0.3);
+           transform: translateY(-2px);
+           box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+         }
+         
+         .ar-start-btn:active {
+           transform: translateY(0px);
+           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+         }
+         
+         .ar-start-btn:disabled {
+           background: rgba(100, 100, 100, 0.3);
+           cursor: not-allowed;
+           transform: none;
+           box-shadow: none;
+           animation: none;
+         }
+    
+         .btn-icon {
+           font-size: 18px;
+           animation: float 3s ease-in-out infinite;
+         }
+         
+         .btn-text {
+           position: relative;
+           z-index: 2;
+           font-weight: 500;
+         }
+    
+    /* Cute animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+         @keyframes bounceIn {
+           0% {
+             opacity: 0;
+             transform: scale(0.3);
+           }
+           50% {
+             opacity: 1;
+             transform: scale(1.05);
+           }
+           70% {
+             transform: scale(0.9);
+           }
+           100% {
+             opacity: 1;
+             transform: scale(1);
+           }
+         }
+         
+         @keyframes pulse {
+           0%, 100% {
+             opacity: 0.6;
+             transform: translate(-50%, -50%) scale(1);
+           }
+           50% {
+             opacity: 1;
+             transform: translate(-50%, -50%) scale(1.1);
+           }
+         }
+    
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    
+    @keyframes pulse {
+      0%, 80%, 100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+      }
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+         .meditation-overlay {
+           position: absolute;
+           top: 0;
+           left: 0;
+           right: 0;
+           bottom: 0;
+           pointer-events: none;
+           z-index: 101;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           justify-content: center;
+           padding: 20px;
+         }
+         
+         .breathing-aura {
+           position: relative;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           width: 300px;
+           height: 300px;
+           margin-top: 20px;
+           margin-bottom: 40px;
+         }
+         
+         .energy-rings {
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           transform: translate(-50%, -50%);
+         }
+         
+         .ring {
+           position: absolute;
+           border: 2px solid rgba(255, 255, 255, 0.1);
+           border-radius: 50%;
+           top: 50%;
+           left: 50%;
+           transform: translate(-50%, -50%);
+           animation: pulse 3s ease-in-out infinite;
+         }
+         
+         .ring-1 {
+           width: 200px;
+           height: 200px;
+           animation-delay: 0s;
+         }
+         
+         .ring-2 {
+           width: 250px;
+           height: 250px;
+           animation-delay: 1s;
+         }
+         
+         .ring-3 {
+           width: 300px;
+           height: 300px;
+           animation-delay: 2s;
+         }
+         
+         @keyframes pulse {
+           0%, 100% {
+             opacity: 0.3;
+             transform: translate(-50%, -50%) scale(1);
+           }
+           50% {
+             opacity: 0.8;
+             transform: translate(-50%, -50%) scale(1.1);
+           }
+         }
+         
+         .breath-circle {
+           position: relative;
+           z-index: 10;
+           width: 140px;
+           height: 140px;
+           border: 2px solid rgba(255, 255, 255, 0.3);
+           border-radius: 50%;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           justify-content: center;
+           background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+           backdrop-filter: blur(20px);
+           transition: all 4s cubic-bezier(0.4, 0, 0.2, 1);
+           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+         }
+         
+         .breath-text {
+           color: white;
+           font-size: 14px;
+           font-weight: 400;
+           text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+           text-align: center;
+           margin-bottom: 8px;
+           letter-spacing: 0.5px;
+           text-transform: uppercase;
+         }
+         
+         .breath-count {
+           color: white;
+           font-size: 32px;
+           font-weight: 300;
+           text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+           text-align: center;
+           letter-spacing: -1px;
+         }
+         
+         .breath-circle.inhale {
+           transform: scale(1.3);
+           border-color: rgba(135, 206, 235, 0.6);
+           background: radial-gradient(circle, rgba(135, 206, 235, 0.15) 0%, rgba(135, 206, 235, 0.05) 100%);
+           box-shadow: 0 12px 40px rgba(135, 206, 235, 0.2);
+         }
+         
+         .breath-circle.exhale {
+           transform: scale(0.8);
+           border-color: rgba(152, 251, 152, 0.6);
+           background: radial-gradient(circle, rgba(152, 251, 152, 0.15) 0%, rgba(152, 251, 152, 0.05) 100%);
+           box-shadow: 0 12px 40px rgba(152, 251, 152, 0.2);
+         }
+         
+         .breath-circle.hold {
+           transform: scale(1.1);
+           border-color: rgba(255, 255, 255, 0.6);
+           background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+           box-shadow: 0 12px 40px rgba(255, 255, 255, 0.2);
+         }
+         
+         .breath-circle.pause {
+           transform: scale(0.9);
+           border-color: rgba(200, 200, 255, 0.6);
+           background: radial-gradient(circle, rgba(200, 200, 255, 0.15) 0%, rgba(200, 200, 255, 0.05) 100%);
+           box-shadow: 0 12px 40px rgba(200, 200, 255, 0.2);
+         }
+         
+         
+         .meditation-instructions {
+           pointer-events: none;
+           text-align: center;
+           position: absolute;
+           top: 80px;
+           left: 50%;
+           transform: translateX(-50%);
+           width: 90%;
+           max-width: 500px;
+         }
+         
+         .meditation-instructions p {
+           color: rgba(255, 255, 255, 0.9);
+           font-size: 18px;
+           font-weight: 400;
+           text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+           background: rgba(0, 0, 0, 0.3);
+           padding: 15px 25px;
+           border-radius: 25px;
+           backdrop-filter: blur(15px);
+           border: 1px solid rgba(255, 255, 255, 0.2);
+           animation: fadeInOut 6s ease-in-out infinite;
+         }
+         
+         @keyframes fadeInOut {
+           0%, 100% { opacity: 0.7; }
+           50% { opacity: 1; }
+         }
+         
+         .square-breathing-info {
+           position: absolute;
+           right: 24px;
+           top: 50%;
+           transform: translateY(-50%);
+           background: rgba(255, 255, 255, 0.05);
+           padding: 24px;
+           border-radius: 20px;
+           backdrop-filter: blur(20px);
+           border: 1px solid rgba(255, 255, 255, 0.1);
+           max-width: 280px;
+           pointer-events: none;
+           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+         }
+         
+         .square-breathing-info h3 {
+           color: white;
+           font-size: 16px;
+           font-weight: 500;
+           margin: 0 0 16px 0;
+           text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+           letter-spacing: 0.5px;
+         }
+         
+         .square-breathing-info p {
+           color: rgba(255, 255, 255, 0.8);
+           font-size: 13px;
+           margin: 0 0 12px 0;
+           line-height: 1.5;
+           text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+         }
+         
+    .square-breathing-info p:last-child {
+      margin-bottom: 0;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.4;
+    }
+    
+    /* ===== GRADIENT FILTER SYSTEM (ADD-ON) ===== */
+    .gradient-filter-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    
+    .gradient-filter-overlay.active {
+      opacity: 1;
+    }
+    
+    .gradient-face-overlay {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(45deg, 
+        rgba(255, 182, 193, 0.6),  /* Soft pink */
+        rgba(173, 216, 230, 0.6),  /* Light blue */
+        rgba(255, 182, 193, 0.6)   /* Back to pink */
+      );
+      mix-blend-mode: overlay;
+      transition: all 0.1s ease;
+      animation: gradientFlow 4s ease-in-out infinite;
+    }
+    
+    .gradient-hand-overlay {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(45deg, 
+        rgba(255, 182, 193, 0.5),  /* Soft pink */
+        rgba(173, 216, 230, 0.5),  /* Light blue */
+        rgba(255, 182, 193, 0.5)   /* Back to pink */
+      );
+      mix-blend-mode: overlay;
+      transition: all 0.1s ease;
+      animation: gradientFlow 4s ease-in-out infinite;
+    }
+    
+    @keyframes gradientFlow {
+      0%, 100% {
+        background: linear-gradient(45deg, 
+          rgba(255, 182, 193, 0.6), 
+          rgba(173, 216, 230, 0.6), 
+          rgba(255, 182, 193, 0.6)
+        );
+      }
+      50% {
+        background: linear-gradient(45deg, 
+          rgba(173, 216, 230, 0.6), 
+          rgba(255, 182, 193, 0.6), 
+          rgba(173, 216, 230, 0.6)
+        );
+      }
+    }
+    
+    /* Auto-activated gradient system - no toggle button needed */
+         
+         .plant-type-selector {
+           display: flex;
+           gap: 5px;
+           background: rgba(0, 0, 0, 0.3);
+           border-radius: 25px;
+           padding: 5px;
+           backdrop-filter: blur(10px);
+         }
+         
+         .plant-type-btn {
+           background: transparent;
+           color: rgba(255, 255, 255, 0.7);
+           border: none;
+           padding: 10px 15px;
+           border-radius: 20px;
+           font-size: 14px;
+           font-weight: 500;
+           cursor: pointer;
+           transition: all 0.3s ease;
+           display: flex;
+           align-items: center;
+           gap: 8px;
+           min-width: 80px;
+           justify-content: center;
+         }
+         
+         .plant-type-btn.active {
+           background: rgba(255, 105, 180, 0.6);
+           color: white;
+           transform: scale(1.05);
+         }
+         
+         .plant-type-btn:hover {
+           background: rgba(255, 255, 255, 0.2);
+           color: white;
+         }
+         
+         .plant-type-btn.active:hover {
+           background: rgba(255, 105, 180, 0.8);
+         }
+         
+         .btn-icon {
+           font-size: 16px;
+         }
+         
+         .btn-text {
+           font-size: 12px;
+           font-weight: 600;
+         }
+         
+         .ar-clear-btn {
+           background: rgba(255, 255, 255, 0.2);
+           color: white;
+           border: 1px solid rgba(255, 255, 255, 0.3);
+           padding: 12px 20px;
+           border-radius: 20px;
+           font-size: 14px;
+           font-weight: 500;
+           cursor: pointer;
+           transition: all 0.3s ease;
+           backdrop-filter: blur(10px);
+         }
+         
+         .ar-clear-btn:hover {
+           background: rgba(255, 255, 255, 0.3);
+           transform: translateY(-1px);
+         }
+    
+    .ar-instructions {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+      z-index: 101;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .ar-instructions.show {
+      opacity: 1;
+    }
+    
+    .ar-instructions p {
+      background: rgba(0,0,0,0.6);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      margin: 0;
+      font-size: 14px;
+      font-weight: 400;
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+    
+         #message {
+           display: none; /* Hidden - using cleaner status system */
+         }
+         
+         /* Hide cursor in meditation mode */
+         .meditation-overlay {
+           cursor: none !important;
+         }
+         
+         .meditation-overlay * {
+           cursor: none !important;
+         }
+         
+         .meditation-overlay button {
+           cursor: pointer !important;
+         }
+         
+         /* Hide cursor on body when meditation is active */
+         body.meditation-active {
+           cursor: none !important;
+         }
+         
+         body.meditation-active * {
+           cursor: none !important;
+         }
+         
+         body.meditation-active button {
+           cursor: pointer !important;
+         }
+    
+    #loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.9);
+      padding: 20px;
+      border-radius: 10px;
+      z-index: 4;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <video id="video" autoplay muted playsinline></video>
+    <canvas id="canvas"></canvas>
+    
+    <div id="message">
+      Click "Start Camera" to begin planting flowers!
+    </div>
+    
+    <!-- Gradient Filter Overlay (Add-on Feature) -->
+    <div id="gradientFilterOverlay" class="gradient-filter-overlay"></div>
+    
+    <div id="loading" style="display: none;">
+      Loading flower model...<br>
+      <small>This may take a moment</small>
+    </div>
+    
+  <div id="ui">
+    <!-- Gradient Filter Auto-Activated (Add-on Feature) -->
+    
+    <div class="ar-header">
+      <div class="ar-title">SOMA</div>
+      <div class="ar-status" id="arStatus">Ready to begin</div>
+    </div>
+      
+      <div class="ar-center-control">
+        <div class="welcome-screen">
+          <div class="abstract-shape"></div>
+          <div class="welcome-title">ENTER THE VOID</div>
+          <div class="welcome-subtitle">Where breath becomes creation and consciousness blooms into existence</div>
+          <button id="startBtn" class="ar-start-btn">
+            <span class="btn-icon">→</span>
+            <span class="btn-text">Begin Journey</span>
+          </button>
+        </div>
+      </div>
+      
+           <div class="meditation-overlay" id="meditationOverlay" style="display: none;">
+             <div class="breathing-aura" id="breathingAura">
+               <div class="breath-circle" id="breathCircle">
+                 <div class="breath-text" id="breathText">Breathe</div>
+                 <div class="breath-count" id="breathCount">1</div>
+               </div>
+               <div class="energy-rings">
+                 <div class="ring ring-1"></div>
+                 <div class="ring ring-2"></div>
+                 <div class="ring ring-3"></div>
+               </div>
+             </div>
+             
+             <div class="square-breathing-info">
+               <h3>THE RHYTHM</h3>
+               <p>Inhale • Hold • Exhale • Pause</p>
+               <p>Ancient wisdom meets modern consciousness. Each breath a portal to deeper awareness.</p>
+             </div>
+           </div>
+      
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  
+  <!-- Simple Webcam-Based Gradient System (No AI needed) -->
+  <script>
+    // Simple test first
+    console.log('Script starting...');
+    
+    // Global variables
+    let video, canvas, message, loading, startBtn, clearBtn, arStatus, instructions;
+    let scene, camera, renderer;
+    let flowerModel = null;
+    let currentPlantType = 'flower';
+    let plants = [];
+    let arMode = false;
+    let lastTapTime = 0;
+    let isCameraActive = false;
+    let hands = null;
+    let selectedPlant = null;
+    let handTrackingActive = false;
+    let isMeditationActive = false;
+    let soundEnabled = true; // Auto-enable sound for square breathing
+    let breathingInterval = null;
+    let audioContext = null;
+    let brownNoise = null;
+    let ambientSounds = [];
+    let currentFlower = null;
+    let breathPhase = 'inhale'; // inhale, hold, exhale, pause
+    
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOM loaded');
+      
+      // Get DOM elements
+      video = document.getElementById('video');
+      canvas = document.getElementById('canvas');
+      message = document.getElementById('message');
+      loading = document.getElementById('loading');
+           startBtn = document.getElementById('startBtn');
+           arStatus = document.getElementById('arStatus');
+      
+           console.log('DOM elements found:', {
+             video: !!video,
+             canvas: !!canvas,
+             message: !!message,
+             startBtn: !!startBtn,
+             arStatus: !!arStatus
+           });
+      
+      // Setup Three.js
+      setupThreeJS();
+      
+      // Setup event listeners
+      setupEventListeners();
+      
+      // Load flower model
+      loadFlowerModel();
+      
+    });
+    
+    function setupThreeJS() {
+      console.log('Setting up Three.js...');
+      
+      // Scene
+      scene = new THREE.Scene();
+      
+      // Camera
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.z = 1;
+      
+      // Renderer
+      renderer = new THREE.WebGLRenderer({ 
+        canvas: canvas, 
+        alpha: true,
+        antialias: true
+      });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setClearColor(0x000000, 0);
+      
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+      scene.add(ambientLight);
+      
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      directionalLight.position.set(1, 1, 1);
+      scene.add(directionalLight);
+      
+      console.log('Three.js setup complete');
+    }
+    
+    function setupEventListeners() {
+      console.log('Setting up event listeners...');
+      
+           // Button events
+           startBtn.addEventListener('click', startCamera);
+           
+           // Initialize audio context on first user interaction
+           document.addEventListener('click', initAudioOnFirstClick, { once: true });
+      
+           // No click events needed - flowers appear automatically with breath
+      
+      // Window resize
+      window.addEventListener('resize', onWindowResize);
+      
+      console.log('Event listeners set up');
+    }
+    
+    async function startCamera() {
+      console.log('Starting AR mode...');
+      arMode = true;
+      
+      try {
+        startBtn.disabled = true;
+        startBtn.textContent = 'Starting...';
+        arStatus.textContent = 'Initializing AR';
+        
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { 
+            facingMode: 'user',
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          } 
+        });
+        
+        video.srcObject = stream;
+        await video.play();
+        
+             isCameraActive = true;
+             document.querySelector('.welcome-screen').style.display = 'none'; // Hide welcome screen
+             document.querySelector('.ar-center-control').style.display = 'none'; // Hide entire welcome section
+             document.getElementById('meditationOverlay').style.display = 'flex'; // Show meditation overlay
+             document.body.classList.add('meditation-active'); // Add class to hide cursor
+             arStatus.textContent = 'Meditation Active';
+        
+        // Initialize hand tracking
+        initHandTracking();
+        
+        // Start meditation
+        startMeditation();
+        
+        console.log('AR camera started successfully');
+        
+      } catch (error) {
+        console.error('AR camera error:', error);
+        arStatus.textContent = 'AR Simulation';
+        
+             // Fallback: show a colored background
+             video.style.background = 'linear-gradient(45deg, #87CEEB, #98FB98)';
+             video.style.display = 'block';
+             document.querySelector('.welcome-screen').style.display = 'none'; // Hide welcome screen
+             document.querySelector('.ar-center-control').style.display = 'none'; // Hide entire welcome section
+             document.getElementById('meditationOverlay').style.display = 'flex'; // Show meditation overlay
+             document.body.classList.add('meditation-active'); // Add class to hide cursor
+        arStatus.textContent = 'Meditation Active';
+        
+        // Initialize hand tracking even in fallback mode
+        initHandTracking();
+        
+        // Start meditation
+        startMeditation();
+        
+        isCameraActive = true; // Still allow planting
+      }
+    }
+    
+    
+    function handleCanvasClick(event) {
+      console.log('AR tap detected at:', event.clientX, event.clientY);
+      
+      if (!isCameraActive) {
+        return;
+      }
+      
+      // Prevent double-taps
+      const now = Date.now();
+      if (now - lastTapTime < 300) return;
+      lastTapTime = now;
+      
+      // AR haptic feedback simulation
+      if (navigator.vibrate) {
+        navigator.vibrate(50); // Short vibration
+      }
+      
+      const rect = canvas.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      const y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      
+      console.log('AR world coordinates:', x, y);
+      
+      // Convert to world coordinates for plant interaction check
+      const worldX = x * 0.8;
+      const worldY = y * 0.6;
+      const worldZ = -0.3;
+      
+      // Simple: Just create new plants, no complex interaction
+      
+      // Otherwise, create a new plant at tap position
+      const plant = createPlant();
+      
+      // Position plant in AR space (spread across full screen)
+      const distance = 0.3; // Closer to camera for AR feel
+      
+      // Map tap coordinates to full screen width
+      plant.position.x = worldX;
+      plant.position.y = worldY;
+      plant.position.z = worldZ;
+      
+      // Add some randomness for natural AR placement
+      plant.position.x += (Math.random() - 0.5) * 0.1;
+      plant.position.y += (Math.random() - 0.5) * 0.1;
+      plant.position.z += (Math.random() - 0.5) * 0.05;
+      
+      // Add AR-style entrance animation
+      plant.scale.set(0, 0, 0);
+      scene.add(plant);
+      plants.push(plant);
+      
+      // Animate plant growing in
+      animatePlantEntrance(plant);
+      
+      console.log('AR plant created at position:', plant.position);
+      console.log('Total AR plants:', plants.length);
+      
+      // Update AR status
+      arStatus.textContent = `AR Active - ${plants.length} flowers`;
+    }
+    
+    function animatePlantEntrance(plant) {
+      const targetScale = plant.userData.originalScale || 1;
+      let scale = 0;
+      const startTime = Date.now();
+      
+      function grow() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / 4000, 1); // 4 seconds to grow
+        
+        // Use easing function for natural growth
+        const easedProgress = 1 - Math.pow(1 - progress, 2); // Gentle ease-out quadratic
+        scale = easedProgress * targetScale;
+        
+        if (progress < 1) {
+          plant.scale.setScalar(scale);
+          requestAnimationFrame(grow);
+        } else {
+          plant.scale.setScalar(targetScale);
+          
+          // Start fade out after 4 seconds of being fully grown
+          setTimeout(() => {
+            fadeOutPlant(plant);
+          }, 4000);
+        }
+      }
+      
+      grow();
+    }
+    
+    function fadeOutPlant(plant) {
+      let opacity = 1;
+      const fadeStartTime = Date.now();
+      
+      function fade() {
+        const elapsed = Date.now() - fadeStartTime;
+        const progress = Math.min(elapsed / 4000, 1); // 4 seconds to fade
+        
+        opacity = 1 - progress;
+        
+        if (progress < 1) {
+          plant.traverse((child) => {
+            if (child.material) {
+              child.material.opacity = opacity;
+              child.material.transparent = true;
+            }
+          });
+          requestAnimationFrame(fade);
+        } else {
+          // Remove plant from scene
+          scene.remove(plant);
+          const index = plants.indexOf(plant);
+          if (index > -1) {
+            plants.splice(index, 1);
+          }
+        }
+      }
+      
+      fade();
+    }
+    
+    function createPlant() {
+      console.log('Creating flower');
+      console.log('Flower model available:', !!flowerModel);
+      
+      const group = new THREE.Group();
+      
+      if (flowerModel) {
+        // Use YOUR actual flower model
+        const flower = flowerModel.clone();
+        
+      // Make flowers MUCH larger and more whimsical
+      const whimsicalScale = (flowerModel.userData.scale || 0.3) * 3; // 3x bigger!
+      flower.scale.setScalar(whimsicalScale);
+      group.userData.originalScale = whimsicalScale; // Store for entrance animation
+        
+        // Position flower at ground level
+        flower.position.y = -(flowerModel.userData.minY || 0) * whimsicalScale;
+        
+        // Add whimsical rotation animation
+        flower.userData.rotationSpeed = (Math.random() - 0.5) * 0.02; // Random rotation speed
+        flower.userData.bobSpeed = Math.random() * 0.02 + 0.01; // Random bobbing speed
+        flower.userData.bobHeight = Math.random() * 0.1 + 0.05; // Random bobbing height
+        flower.userData.timeOffset = Math.random() * Math.PI * 2; // Random start time
+        
+        group.add(flower);
+        group.userData.isFlower = true;
+        group.userData.isWhimsical = true;
+        
+        // Add animation data to the group itself
+        group.userData.rotationSpeed = (Math.random() - 0.5) * 0.02;
+        group.userData.bobSpeed = Math.random() * 0.02 + 0.01;
+        group.userData.bobHeight = Math.random() * 0.1 + 0.05;
+        group.userData.timeOffset = Math.random() * Math.PI * 2;
+        
+        console.log('✅ Created WHIMSICAL flower using YOUR flower model');
+        console.log('Whimsical scale:', whimsicalScale);
+        console.log('Flower model loaded:', !!flowerModel);
+      } else {
+        // Fallback procedural plants
+        const stem = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.02, 0.025, 0.2, 8),
+          new THREE.MeshBasicMaterial({ color: 0x4CAF50 })
+        );
+        stem.position.y = 0.1;
+        group.add(stem);
+
+        if (currentPlantType === 'flower') {
+          // Simple flower - make it more visible and whimsical
+        const center = new THREE.Mesh(
+          new THREE.SphereGeometry(0.05, 8, 8), // Bigger center
+          new THREE.MeshBasicMaterial({ color: 0xFFFF00 })
+        );
+        center.position.y = 0.18;
+        center.userData.rotationSpeed = 0.01; // Rotate the center
+        group.add(center);
+        
+        // Add petals around the center
+        for (let i = 0; i < 8; i++) { // More petals
+          const petal = new THREE.Mesh(
+            new THREE.SphereGeometry(0.03, 8, 8), // Bigger petals
+            new THREE.MeshBasicMaterial({ color: 0xFF69B4 })
+          );
+          const angle = (i / 8) * Math.PI * 2;
+          petal.position.x = Math.cos(angle) * 0.08; // Wider spread
+          petal.position.y = 0.18;
+          petal.position.z = Math.sin(angle) * 0.08;
+          petal.scale.set(1.8, 0.8, 1.8); // Bigger scale
+          petal.userData.rotationSpeed = (Math.random() - 0.5) * 0.015; // Each petal rotates differently
+          petal.userData.bobSpeed = Math.random() * 0.02 + 0.01;
+          petal.userData.bobHeight = Math.random() * 0.1 + 0.05;
+          petal.userData.timeOffset = Math.random() * Math.PI * 2;
+          group.add(petal);
+        }
+          console.log('Created whimsical procedural flower');
+        } else {
+          // Simple seed/leaf - make it more visible
+          const leaf = new THREE.Mesh(
+            new THREE.SphereGeometry(0.04, 8, 8),
+            new THREE.MeshBasicMaterial({ color: 0x90EE90 })
+          );
+          leaf.position.y = 0.16;
+          leaf.scale.set(1.5, 0.8, 1.2);
+          group.add(leaf);
+          console.log('Created seed plant');
+        }
+        
+        // Make procedural plants much larger and whimsical
+        group.scale.setScalar(2.5); // Even bigger!
+        group.userData.originalScale = 2.5; // Store for entrance animation
+        group.userData.isWhimsical = true;
+        
+        // Add animation data to procedural plants too
+        group.userData.rotationSpeed = (Math.random() - 0.5) * 0.02;
+        group.userData.bobSpeed = Math.random() * 0.02 + 0.01;
+        group.userData.bobHeight = Math.random() * 0.1 + 0.05;
+        group.userData.timeOffset = Math.random() * Math.PI * 2;
+      }
+      
+      return group;
+    }
+    
+    
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+    
+    async function loadFlowerModel() {
+      console.log('Loading flower model...');
+      
+      try {
+        loading.style.display = 'block';
+        loading.innerHTML = 'Loading your flower model...<br><small>This may take a moment</small>';
+        
+        // Load the actual GLTF model
+        const loader = new THREE.GLTFLoader();
+        
+        const gltf = await new Promise((resolve, reject) => {
+          loader.load(
+            'Flower.glb',
+            resolve,
+            (progress) => {
+              if (progress.lengthComputable) {
+                const percent = Math.round((progress.loaded / progress.total) * 100);
+                loading.innerHTML = `Loading your flower model...<br><small>${percent}%</small>`;
+              }
+            },
+            reject
+          );
+        });
+        
+        flowerModel = gltf.scene.clone();
+        
+        // Optimize the flower model
+        flowerModel.traverse((child) => {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+        });
+        
+        // Pre-calculate scale and positioning
+        const boundingBox = new THREE.Box3().setFromObject(flowerModel);
+        const size = boundingBox.getSize(new THREE.Vector3());
+        const maxSize = Math.max(size.x, size.y, size.z);
+        const targetSize = 0.3; // Good size for AR
+        const scale = targetSize / maxSize;
+        
+        flowerModel.userData.scale = scale;
+        flowerModel.userData.boundingBox = boundingBox;
+        flowerModel.userData.minY = boundingBox.min.y;
+        
+        console.log('✅ Your flower model loaded successfully!');
+        console.log('Model size:', size);
+        console.log('Scale factor:', scale);
+        console.log('Flower model object:', flowerModel);
+        
+        loading.style.display = 'none';
+        message.textContent = '🌸 Your flower model loaded! Click "Start Camera" to begin.';
+        
+      } catch (error) {
+        console.warn('Failed to load your flower model:', error);
+        loading.style.display = 'none';
+        message.textContent = '⚠️ Using simple flowers (your model not found). Click "Start Camera" to begin.';
+      }
+    }
+    
+    
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      // Update camera position
+      camera.position.z = 1;
+      camera.lookAt(0, 0, -1);
+      
+      // Add whimsical animations to flowers
+      const time = Date.now() * 0.001; // Time in seconds
+      
+      plants.forEach(plant => {
+        if (plant.userData.isWhimsical) {
+          // Flower animation
+          if (plant.userData.rotationSpeed !== undefined) {
+            // Rotate the entire flower
+            plant.rotation.y += plant.userData.rotationSpeed;
+            
+            // Add bobbing motion to the entire plant
+            const bobOffset = Math.sin(time * plant.userData.bobSpeed + plant.userData.timeOffset) * plant.userData.bobHeight;
+            plant.position.y += bobOffset * 0.01;
+            
+            // Add gentle swaying
+            plant.rotation.z = Math.sin(time * plant.userData.bobSpeed * 0.5 + plant.userData.timeOffset) * 0.1;
+          }
+          
+          // Also animate individual meshes if they have animation data
+          plant.traverse((child) => {
+            if (child.isMesh && child.userData.rotationSpeed !== undefined) {
+              // Rotate individual mesh parts
+              child.rotation.y += child.userData.rotationSpeed * 0.5;
+              
+              // Add individual bobbing
+              const bobOffset = Math.sin(time * child.userData.bobSpeed + child.userData.timeOffset) * child.userData.bobHeight;
+              child.position.y += bobOffset * 0.005;
+            }
+          });
+        }
+      });
+      
+      renderer.render(scene, camera);
+    }
+    
+    // Start animation
+    animate();
+    
+    console.log('Script initialization complete');
+    
+    // ===== GRADIENT FILTER SYSTEM (ADD-ON) =====
+    // Completely separate module - doesn't interfere with existing SOMA code
+    
+    class GradientFilterSystem {
+      constructor() {
+        this.isActive = false;
+        this.video = null;
+        this.overlay = null;
+        this.canvas = null;
+        this.ctx = null;
+        this.prevFrame = null;
+        this.breathPhase = 'inhale';
+        this.animationId = null;
+        this.gradients = [];
+        
+        console.log('Simple Gradient System initialized (no AI needed)');
+      }
+      
+      async init() {
+        try {
+          // Get DOM elements
+          this.video = document.getElementById('video');
+          this.overlay = document.getElementById('gradientFilterOverlay');
+          
+          if (!this.video || !this.overlay) {
+            console.log('Gradient filter elements not found - feature disabled');
+            return;
+          }
+          
+          // Create canvas for motion detection
+          this.canvas = document.createElement('canvas');
+          this.ctx = this.canvas.getContext('2d');
+          this.canvas.style.display = 'none';
+          document.body.appendChild(this.canvas);
+          
+          // Listen for breathing phase changes
+          this.listenToBreathing();
+          
+          console.log('Simple Gradient System ready - no AI needed!');
+          
+        } catch (error) {
+          console.log('Gradient System initialization failed:', error);
+        }
+      }
+      
+      // Simple motion detection - no AI needed!
+      
+      listenToBreathing() {
+        // Listen for breathing phase changes from existing SOMA system
+        const originalStartBreathingGuide = window.startBreathingGuide;
+        if (originalStartBreathingGuide) {
+          window.startBreathingGuide = () => {
+            originalStartBreathingGuide();
+            this.syncWithBreathing();
+          };
+        }
+      }
+      
+      syncWithBreathing() {
+        // Sync gradient intensity with breathing phases
+        const breathingInterval = setInterval(() => {
+          if (!this.isActive) {
+            clearInterval(breathingInterval);
+            return;
+          }
+          
+          // Get current breath phase from global variable
+          if (typeof breathPhase !== 'undefined') {
+            this.breathPhase = breathPhase;
+            this.updateGradientIntensity();
+          }
+        }, 100);
+      }
+      
+      updateGradientIntensity() {
+        if (!this.isActive) return;
+        
+        // Adjust gradient opacity based on breathing phase
+        const overlay = this.overlay;
+        if (!overlay) return;
+        
+        let intensity = 0.6; // Default
+        
+        switch (this.breathPhase) {
+          case 'inhale':
+            intensity = 0.8; // Brighter on inhale
+            break;
+          case 'hold':
+            intensity = 1.0; // Brightest on hold
+            break;
+          case 'exhale':
+            intensity = 0.6; // Medium on exhale
+            break;
+          case 'pause':
+            intensity = 0.3; // Dimmest on pause
+            break;
+        }
+        
+        // Update all gradient overlays
+        const faceOverlays = overlay.querySelectorAll('.gradient-face-overlay');
+        const handOverlays = overlay.querySelectorAll('.gradient-hand-overlay');
+        
+        [...faceOverlays, ...handOverlays].forEach(el => {
+          el.style.opacity = intensity;
+        });
+      }
+      
+      clearHandOverlays() {
+        const handOverlays = this.overlay.querySelectorAll('.gradient-hand-overlay');
+        handOverlays.forEach(overlay => overlay.remove());
+      }
+      
+      toggle() {
+        this.isActive = true; // Always activate automatically
+        
+        this.overlay.classList.add('active');
+        
+        // Start simple motion detection
+        this.startMotionDetection();
+        
+        console.log('Simple gradient system auto-activated');
+      }
+      
+      startMotionDetection() {
+        const detect = () => {
+          if (!this.isActive) return;
+          
+          try {
+            // Update canvas size to match video
+            this.canvas.width = this.video.videoWidth;
+            this.canvas.height = this.video.videoHeight;
+            
+            // Draw current video frame to canvas
+            this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
+            
+            // Get current frame data
+            const currentFrame = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+            
+            // Detect motion by comparing with previous frame
+            if (this.prevFrame) {
+              const motionAreas = this.detectMotion(this.prevFrame, currentFrame);
+              this.updateGradients(motionAreas);
+            }
+            
+            // Store current frame for next comparison
+            this.prevFrame = currentFrame;
+            
+          } catch (error) {
+            console.log('Motion detection error:', error);
+          }
+          
+          // Continue loop
+          this.animationId = requestAnimationFrame(detect);
+        };
+        
+        detect();
+      }
+      
+      detectMotion(prevFrame, currentFrame) {
+        const motionAreas = [];
+        const threshold = 50; // Sensitivity for motion detection
+        const blockSize = 40; // Size of blocks to check for motion
+        
+        for (let y = 0; y < this.canvas.height - blockSize; y += blockSize) {
+          for (let x = 0; x < this.canvas.width - blockSize; x += blockSize) {
+            let motion = 0;
+            
+            // Compare blocks of pixels
+            for (let by = 0; by < blockSize; by++) {
+              for (let bx = 0; bx < blockSize; bx++) {
+                const prevIndex = ((y + by) * this.canvas.width + (x + bx)) * 4;
+                const currentIndex = ((y + by) * this.canvas.width + (x + bx)) * 4;
+                
+                // Calculate difference in brightness
+                const prevBrightness = (prevFrame.data[prevIndex] + prevFrame.data[prevIndex + 1] + prevFrame.data[prevIndex + 2]) / 3;
+                const currentBrightness = (currentFrame.data[currentIndex] + currentFrame.data[currentIndex + 1] + currentFrame.data[currentIndex + 2]) / 3;
+                
+                motion += Math.abs(currentBrightness - prevBrightness);
+              }
+            }
+            
+            // If motion is above threshold, add this area
+            if (motion > threshold * blockSize * blockSize) {
+              motionAreas.push({
+                x: x + blockSize/2,
+                y: y + blockSize/2,
+                size: blockSize * 2
+              });
+            }
+          }
+        }
+        
+        return motionAreas;
+      }
+      
+      updateGradients(motionAreas) {
+        // Clear existing gradients
+        this.clearHandOverlays();
+        
+        // Create gradients for motion areas
+        motionAreas.forEach((area, index) => {
+          this.createMotionGradient(area, index);
+        });
+        
+        // If no motion, create a center gradient
+        if (motionAreas.length === 0) {
+          this.createCenterGradient();
+        }
+      }
+      
+      createMotionGradient(area, index) {
+        // Create motion gradient overlay
+        const gradientOverlay = document.createElement('div');
+        gradientOverlay.className = 'gradient-hand-overlay';
+        gradientOverlay.setAttribute('data-motion', index);
+        
+        // Position and size the overlay
+        gradientOverlay.style.left = (area.x - area.size/2) + 'px';
+        gradientOverlay.style.top = (area.y - area.size/2) + 'px';
+        gradientOverlay.style.width = area.size + 'px';
+        gradientOverlay.style.height = area.size + 'px';
+        
+        this.overlay.appendChild(gradientOverlay);
+      }
+      
+      createCenterGradient() {
+        // Create a center gradient when no motion is detected
+        let centerGradient = this.overlay.querySelector('.gradient-face-overlay');
+        if (!centerGradient) {
+          centerGradient = document.createElement('div');
+          centerGradient.className = 'gradient-face-overlay';
+          this.overlay.appendChild(centerGradient);
+        }
+        
+        // Position in center of video
+        const centerX = this.video.videoWidth / 2;
+        const centerY = this.video.videoHeight / 2;
+        const size = 150;
+        
+        centerGradient.style.left = (centerX - size/2) + 'px';
+        centerGradient.style.top = (centerY - size/2) + 'px';
+        centerGradient.style.width = size + 'px';
+        centerGradient.style.height = size + 'px';
+      }
+      
+      // Simple motion detection system - no AI needed!
+      
+      // Auto-activation system - no toggle needed
+    }
+    
+    // Initialize gradient filter system
+    const gradientFilterSystem = new GradientFilterSystem();
+    
+    // Auto-activate gradient filters when camera starts
+    const originalStartCamera = window.startCamera;
+    window.startCamera = async function() {
+      await originalStartCamera();
+      gradientFilterSystem.init();
+      // Auto-activate gradient filters
+      setTimeout(() => {
+        gradientFilterSystem.toggle();
+      }, 1000);
+    };
+    
+    console.log('Gradient Filter System loaded as add-on feature');
+    
+    // Add debugging to see what's happening
+    setTimeout(() => {
+      console.log('Debug: Simple motion detection system:', {
+        video: !!document.getElementById('video'),
+        overlay: !!document.getElementById('gradientFilterOverlay'),
+        systemActive: gradientFilterSystem.isActive,
+        canvas: !!gradientFilterSystem.canvas,
+        videoStreaming: gradientFilterSystem.video && gradientFilterSystem.video.videoWidth > 0
+      });
+    }, 2000);
+    
+    // Simple AR Plant System
+    function initHandTracking() {
+      console.log('Meditation system ready');
+      handTrackingActive = true;
+    }
+    
+    // Meditation Functions
+    function startMeditation() {
+      isMeditationActive = true;
+      startBreathingGuide();
+      console.log('Meditation started');
+    }
+    
+    function startBreathingGuide() {
+      const breathCircle = document.getElementById('breathCircle');
+      const breathText = document.getElementById('breathText');
+      const breathCount = document.getElementById('breathCount');
+      
+      let cycleCount = 0;
+      let countdownTimer = null;
+      let phaseCount = 1;
+      
+      // Auto-start sound for square breathing
+      if (!soundEnabled) {
+        toggleSound();
+      }
+      
+      function startCountdown(duration, phase, count) {
+        let timeLeft = duration;
+        phaseCount = count;
+        
+        // Clear any existing timer
+        if (countdownTimer) {
+          clearInterval(countdownTimer);
+        }
+        
+        // Set initial display
+        breathText.textContent = phase;
+        breathCount.textContent = timeLeft;
+        
+        countdownTimer = setInterval(() => {
+          if (!isMeditationActive) {
+            clearInterval(countdownTimer);
+            return;
+          }
+          
+          timeLeft--;
+          
+          if (timeLeft > 0) {
+            breathText.textContent = phase;
+            breathCount.textContent = timeLeft;
+          } else {
+            breathCount.textContent = timeLeft;
+            clearInterval(countdownTimer);
+            countdownTimer = null;
+          }
+        }, 1000);
+      }
+      
+      function squareBreathingCycle() {
+        if (!isMeditationActive) return;
+        
+        // Square breathing: Inhale (4) → Hold (4) → Exhale (4) → Pause (4)
+        const phases = [
+          { name: 'Breathe In', duration: 4, action: 'inhale' },
+          { name: 'Hold', duration: 4, action: 'hold' },
+          { name: 'Breathe Out', duration: 4, action: 'exhale' },
+          { name: 'Pause', duration: 4, action: 'pause' }
+        ];
+        
+        function executePhase(phaseIndex) {
+          if (!isMeditationActive || phaseIndex >= phases.length) return;
+          
+          const phase = phases[phaseIndex];
+          breathPhase = phase.action;
+          
+          // Update visual state
+          breathCircle.className = 'breath-circle';
+          breathCircle.classList.add(phase.action);
+          
+          // Start countdown
+          startCountdown(phase.duration, phase.name, phaseIndex + 1);
+          
+          // Handle flower animation based on phase
+          handleFlowerPhase(phase.action);
+          
+          // Play synchronized sound
+          playBreathSound(phase.action);
+          
+          setTimeout(() => {
+            if (isMeditationActive) {
+              if (phaseIndex === phases.length - 1) {
+                // Complete cycle, start over
+                cycleCount++;
+                executePhase(0);
+              } else {
+                // Next phase
+                executePhase(phaseIndex + 1);
+              }
+            }
+          }, phase.duration * 1000);
+        }
+        
+        // Start the square breathing cycle
+        executePhase(0);
+      }
+      
+      // Start square breathing
+      squareBreathingCycle();
+    }
+    
+    function handleFlowerPhase(phase) {
+      if (phase === 'inhale') {
+        // Create new flower on the left side of screen
+        if (currentFlower) {
+          scene.remove(currentFlower);
+        }
+        currentFlower = createPlant();
+        currentFlower.position.set(-0.8, 0, -0.3); // Left side of screen
+        currentFlower.scale.set(0, 0, 0);
+        scene.add(currentFlower);
+        
+        // Grow flower over 4 seconds with sound sync
+        animateFlowerWithSound(currentFlower, 4, 'grow');
+      } else if (phase === 'hold') {
+        // Keep flower at full size during hold
+        if (currentFlower) {
+          const targetScale = currentFlower.userData.originalScale || 1;
+          currentFlower.scale.setScalar(targetScale);
+        }
+      } else if (phase === 'exhale') {
+        // Shrink flower over 4 seconds with sound sync
+        if (currentFlower) {
+          animateFlowerWithSound(currentFlower, 4, 'shrink');
+        }
+      } else if (phase === 'pause') {
+        // Remove flower during pause
+        if (currentFlower) {
+          scene.remove(currentFlower);
+          currentFlower = null;
+        }
+      }
+    }
+    
+    function animateFlowerWithSound(flower, duration, action) {
+      const targetScale = flower.userData.originalScale || 1;
+      const startTime = Date.now();
+      const baseTime = Date.now() * 0.001; // For continuous motion
+      
+      function animate() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / (duration * 1000), 1);
+        const currentTime = Date.now() * 0.001;
+        
+        let scale;
+        if (action === 'grow') {
+          // Smooth growth with gentle ease-out
+          const easedProgress = 1 - Math.pow(1 - progress, 2);
+          scale = easedProgress * targetScale;
+        } else if (action === 'shrink') {
+          // Smooth shrinking with gentle ease-in
+          const easedProgress = Math.pow(progress, 2);
+          scale = (1 - easedProgress) * targetScale;
+        }
+        
+        if (progress < 1) {
+          flower.scale.setScalar(scale);
+          
+          // Add continuous motion while animating
+          addFlowerMotion(flower, currentTime, scale);
+          
+          requestAnimationFrame(animate);
+        } else {
+          // Animation complete
+          if (action === 'grow') {
+            flower.scale.setScalar(targetScale);
+            // Continue motion even when fully grown
+            addFlowerMotion(flower, currentTime, targetScale);
+            requestAnimationFrame(animate);
+          } else if (action === 'shrink') {
+            flower.scale.setScalar(0);
+          }
+        }
+      }
+      
+      animate();
+    }
+    
+    function addFlowerMotion(flower, time, scale) {
+      // Gentle swaying motion
+      flower.rotation.z = Math.sin(time * 0.8) * 0.1;
+      
+      // Gentle rotation
+      flower.rotation.y += 0.01;
+      
+      // Gentle bobbing motion
+      flower.position.y = Math.sin(time * 1.2) * 0.05;
+      
+      // Subtle pulsing effect
+      const pulseScale = 1 + Math.sin(time * 2) * 0.05;
+      flower.scale.setScalar(scale * pulseScale);
+      
+      // Add motion to individual flower parts
+      flower.traverse((child) => {
+        if (child.isMesh && child.userData.rotationSpeed !== undefined) {
+          // Rotate individual petals/parts
+          child.rotation.y += child.userData.rotationSpeed * 0.5;
+          
+          // Add individual swaying
+          child.rotation.z = Math.sin(time * 1.5 + child.userData.timeOffset) * 0.08;
+        }
+      });
+    }
+    
+    function playBreathSound(phase) {
+      if (!soundEnabled || !audioContext) return;
+      
+      try {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        // Different frequencies for different phases
+        const frequencies = {
+          inhale: 220,    // A3 - gentle rise
+          hold: 246.94,   // B3 - sustained
+          exhale: 185,    // F#3 - gentle fall
+          pause: 164.81   // E3 - restful
+        };
+        
+        oscillator.frequency.setValueAtTime(frequencies[phase], audioContext.currentTime);
+        oscillator.type = 'sine';
+        
+        // Gentle volume envelope
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.1);
+        gainNode.gain.linearRampToValueAtTime(0.05, audioContext.currentTime + 3.5);
+        gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 4);
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 4);
+      } catch (error) {
+        console.log('Audio not available');
+      }
+    }
+    
+    function createBreathFlower() {
+      const flower = createPlant();
+      
+      // Random position across the screen
+      flower.position.x = (Math.random() - 0.5) * 1.6; // Wider spread
+      flower.position.y = (Math.random() - 0.5) * 1.2; // Vertical spread
+      flower.position.z = -0.3 + (Math.random() - 0.5) * 0.2; // Depth variation
+      
+      // Add to scene
+      scene.add(flower);
+      plants.push(flower);
+      
+      // Grow animation (2 seconds)
+      flower.scale.set(0, 0, 0);
+      animateBreathFlowerGrowth(flower);
+      
+      console.log('Breath flower created at:', flower.position);
+    }
+    
+    function animateBreathFlowerGrowth(flower) {
+      const targetScale = flower.userData.originalScale || 1;
+      let scale = 0;
+      const startTime = Date.now();
+      
+      function grow() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / 2000, 1); // 2 seconds to grow
+        
+        const easedProgress = 1 - Math.pow(1 - progress, 2);
+        scale = easedProgress * targetScale;
+        
+        if (progress < 1) {
+          flower.scale.setScalar(scale);
+          requestAnimationFrame(grow);
+        } else {
+          flower.scale.setScalar(targetScale);
+        }
+      }
+      
+      grow();
+    }
+    
+    function fadeOutAllFlowers() {
+      plants.forEach((plant, index) => {
+        setTimeout(() => {
+          fadeOutPlant(plant);
+        }, index * 200); // Stagger fade out
+      });
+    }
+    
+    
+    function initAudioOnFirstClick() {
+      console.log('First click detected - initializing audio context');
+      initAudioContext();
+    }
+    
+    function initAudioContext() {
+      console.log('Initializing audio context...');
+      
+      if (!audioContext) {
+        try {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          console.log('Audio context created:', audioContext.state);
+        } catch (error) {
+          console.error('Failed to create audio context:', error);
+          return false;
+        }
+      }
+      
+      if (audioContext.state === 'suspended') {
+        console.log('Audio context suspended, resuming...');
+        audioContext.resume().then(() => {
+          console.log('Audio context resumed:', audioContext.state);
+        }).catch(error => {
+          console.error('Failed to resume audio context:', error);
+        });
+      }
+      
+      return true;
+    }
+    
+    function createMelodicPad() {
+      const bufferSize = 4096;
+      const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+      const data = buffer.getChannelData(0);
+      
+      // Create a gentle, melodic pad sound
+      for (let i = 0; i < bufferSize; i++) {
+        const time = i / audioContext.sampleRate;
+        const frequency1 = 220; // A3
+        const frequency2 = 329.63; // E4 (perfect fifth)
+        const frequency3 = 440; // A4
+        
+        // Gentle sine waves with slow modulation
+        const wave1 = Math.sin(2 * Math.PI * frequency1 * time) * 0.3;
+        const wave2 = Math.sin(2 * Math.PI * frequency2 * time) * 0.2;
+        const wave3 = Math.sin(2 * Math.PI * frequency3 * time) * 0.15;
+        
+        // Add gentle modulation
+        const mod = Math.sin(time * 0.5) * 0.1;
+        data[i] = (wave1 + wave2 + wave3) * (0.8 + mod);
+      }
+      
+      const padSource = audioContext.createBufferSource();
+      padSource.buffer = buffer;
+      padSource.loop = true;
+      
+      return padSource;
+    }
+    
+    function createGentleChimes() {
+      const bufferSize = 4096;
+      const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+      const data = buffer.getChannelData(0);
+      
+      for (let i = 0; i < bufferSize; i++) {
+        const time = i / audioContext.sampleRate;
+        
+        // Create gentle chime-like tones
+        const freq1 = 523.25; // C5
+        const freq2 = 659.25; // E5
+        const freq3 = 783.99; // G5
+        
+        const wave1 = Math.sin(2 * Math.PI * freq1 * time) * 0.15;
+        const wave2 = Math.sin(2 * Math.PI * freq2 * time) * 0.12;
+        const wave3 = Math.sin(2 * Math.PI * freq3 * time) * 0.1;
+        
+        // Add gentle envelope
+        const envelope = Math.sin(time * 2) * 0.3 + 0.7;
+        data[i] = (wave1 + wave2 + wave3) * envelope;
+      }
+      
+      const chimeSource = audioContext.createBufferSource();
+      chimeSource.buffer = buffer;
+      chimeSource.loop = true;
+      
+      return chimeSource;
+    }
+    
+    function createSoftDrone() {
+      const bufferSize = 4096;
+      const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+      const data = buffer.getChannelData(0);
+      
+      for (let i = 0; i < bufferSize; i++) {
+        const time = i / audioContext.sampleRate;
+        
+        // Very low, soft drone
+        const frequency = 55; // A1 - very low
+        const wave = Math.sin(2 * Math.PI * frequency * time) * 0.2;
+        
+        // Add gentle variation
+        const variation = Math.sin(time * 0.1) * 0.05;
+        data[i] = wave + variation;
+      }
+      
+      const droneSource = audioContext.createBufferSource();
+      droneSource.buffer = buffer;
+      droneSource.loop = true;
+      
+      return droneSource;
+    }
+    
+    function startAmbientSounds() {
+      console.log('Starting ambient sounds...');
+      
+      if (!initAudioContext()) {
+        console.error('Failed to initialize audio context');
+        return;
+      }
+      
+      try {
+        // Melodic pad - main ambient sound
+        const melodicPad = createMelodicPad();
+        const padGain = audioContext.createGain();
+        padGain.gain.setValueAtTime(0.2, audioContext.currentTime);
+        
+        melodicPad.connect(padGain);
+        padGain.connect(audioContext.destination);
+        melodicPad.start();
+        ambientSounds.push(melodicPad);
+        console.log('Melodic pad started');
+        
+        // Gentle chimes - subtle background
+        const gentleChimes = createGentleChimes();
+        const chimeGain = audioContext.createGain();
+        chimeGain.gain.setValueAtTime(0.1, audioContext.currentTime);
+        
+        gentleChimes.connect(chimeGain);
+        chimeGain.connect(audioContext.destination);
+        gentleChimes.start();
+        ambientSounds.push(gentleChimes);
+        console.log('Gentle chimes started');
+        
+        // Soft drone - deep foundation
+        const softDrone = createSoftDrone();
+        const droneGain = audioContext.createGain();
+        droneGain.gain.setValueAtTime(0.15, audioContext.currentTime);
+        
+        softDrone.connect(droneGain);
+        droneGain.connect(audioContext.destination);
+        softDrone.start();
+        ambientSounds.push(softDrone);
+        console.log('Soft drone started');
+        
+        console.log('All melodic ambient sounds started successfully');
+      } catch (error) {
+        console.error('Error starting ambient sounds:', error);
+      }
+    }
+    
+    function stopAmbientSounds() {
+      ambientSounds.forEach(sound => {
+        try {
+          sound.stop();
+        } catch (e) {
+          // Sound might already be stopped
+        }
+      });
+      ambientSounds = [];
+      brownNoise = null;
+      console.log('Ambient sounds stopped');
+    }
+  </script>
+</body>
+</html>

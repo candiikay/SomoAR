@@ -1,0 +1,20 @@
+{
+  "name": "soma-meditation",
+  "version": "1.0.0",
+  "description": "SOMA - Consciousness Meditation with Motion-Based Gradient Filters",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8001",
+    "dev": "python3 -m http.server 8001"
+  },
+  "keywords": [
+    "meditation",
+    "breathing",
+    "consciousness",
+    "webxr",
+    "threejs",
+    "wellness"
+  ],
+  "author": "Candace Stewart",
+  "license": "MIT"
+}
